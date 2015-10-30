@@ -145,6 +145,14 @@ namespace ConsoleApplication1.Tests
             var parsedExpression = new ExpressionParser("10/5").Parse();
             parsedExpression.Evaluate().Should().Be(10/5);
         }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Decimals()
+        {
+            var parsedExpression = new ExpressionParser("10.5 - 0.5").Parse();
+            parsedExpression.Evaluate().Should().Be(10.5 - 0.5);
+        }
+
         [Test]
         public void Expression_Parser_Should_Parse_Division_And_Addition()
         {

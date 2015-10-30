@@ -120,9 +120,13 @@ namespace ConsoleApplication1.Expression
 
                     return left.Pop();
                 }
+                else if (char.IsWhiteSpace(c))
+                {
+                    _expression.Pop();
+                }
                 else
                 {
-                    throw new NotImplementedException();
+                    throw new NotImplementedException($"Cannot parse char '{c}'");
                 }
             }
 
@@ -186,10 +190,18 @@ namespace ConsoleApplication1.Expression
             var expression = new StringBuilder();
             expression.Append(c);
 
-            while (HasMoreChars && char.IsDigit(_expression.Peek()))
+            while (HasMoreChars)
             {
-                c = _expression.Pop();
-                expression.Append(c);
+                c = _expression.Peek();
+                if (char.IsDigit(c) || c == '.')
+                {
+                    c = _expression.Pop();
+                    expression.Append(c);
+                }
+                else
+                {
+                    return expression.ToString();
+                }
             }
 
             return expression.ToString();
