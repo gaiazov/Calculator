@@ -40,7 +40,7 @@ namespace Calculator.Expression
                         right.Push(expression);
                     }
                 }
-                else if (IsPlusOrMinus(c) || IsTimesOrDivide(c))
+                else if (IsOperand(c))
                 {
                     var operand = ParseOperand(_expression.Pop());
 
@@ -127,14 +127,9 @@ namespace Calculator.Expression
             return left.Pop();
         }
 
-        internal static bool IsPlusOrMinus(char c)
+        internal static bool IsOperand(char c)
         {
-            return c == '-' || c == '+';
-        }
-
-        internal static bool IsTimesOrDivide(char c)
-        {
-            return c == '*' || c == '/';
+            return c == '-' || c == '+' || c == '*' || c == '/';
         }
 
         internal static bool IsOpeningBracket(char c)

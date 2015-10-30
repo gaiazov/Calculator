@@ -34,16 +34,6 @@ namespace Calculator.Expression
             Left = left;
             Right = right;
         }
-        public OperationExpression(IExpression left, Operand operand)
-        {
-            Operand = operand;
-            Left = left;
-        }
-
-        public OperationExpression(Operand operand)
-        {
-            Operand = operand;
-        }
 
         public double Evaluate()
         {
