@@ -163,6 +163,13 @@ namespace Calculator.Tests
         }
 
         [Test]
+        public void Expression_Parser_Should_Parse_Nested_Nested_Brackets()
+        {
+            var parsedExpression = new ExpressionParser("5 + (5 - (5 + (5 - 4))) + 2").Parse();
+            parsedExpression.Evaluate().Should().Be(5 + (5 - (5 + (5 - 4))) + 2);
+        }
+
+        [Test]
         public void Expression_Parser_Should_Parse_Fifty_Five_Minus_Five()
         {
             var parsedExpression = new ExpressionParser("55-5").Parse();
