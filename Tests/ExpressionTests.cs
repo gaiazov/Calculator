@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApplication1.Expression;
+using Calculator.Expression;
 using NUnit.Framework;
 using FluentAssertions;
 
-namespace ConsoleApplication1.Tests
+namespace Calculator.Tests
 {
     [TestFixture]
     class ExpressionTests

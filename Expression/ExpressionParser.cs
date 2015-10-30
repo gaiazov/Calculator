@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleApplication1.Expression
+namespace Calculator.Expression
 {
     public class ExpressionParser
     {
@@ -19,7 +19,6 @@ namespace ConsoleApplication1.Expression
 
         public IExpression Parse()
         {
-
             var left = new Stack<IExpression>();
             var operands = new Stack<Operand>();
             var right = new Stack<IExpression>(); 
@@ -50,37 +49,17 @@ namespace ConsoleApplication1.Expression
                         left.Push(right.Pop());
                     }
 
-                    if (operands.Any())
+                    while (operands.Any() && left.Any() && right.Any())
                     {
-                        var currentOperand = operands.Peek();
-                        if ((operand == Operand.Plus || operand == Operand.Minus) &&
-                            (currentOperand == Operand.Multiply || currentOperand == Operand.Divide))
-                        {
-                            var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
+                        var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
 
-                            if (left.Count == right.Count)
-                            {
-                                left.Push(expression);
-                            }
-                            else
-                            {
-                                right.Push(expression);
-                            }
+                        if (left.Count == right.Count)
+                        {
+                            left.Push(expression);
                         }
-
-                        if ((operand == Operand.Plus || operand == Operand.Minus) &&
-                            (currentOperand == Operand.Plus || currentOperand == Operand.Minus))
+                        else
                         {
-                            var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
-
-                            if (left.Count == right.Count)
-                            {
-                                left.Push(expression);
-                            }
-                            else
-                            {
-                                right.Push(expression);
-                            }
+                            right.Push(expression);
                         }
                     }
 
@@ -129,6 +108,7 @@ namespace ConsoleApplication1.Expression
                     throw new NotImplementedException($"Cannot parse char '{c}'");
                 }
             }
+
 
             while (operands.Any())
             {

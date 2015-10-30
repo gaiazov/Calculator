@@ -1,7 +1,7 @@
 ﻿using System;
-using ConsoleApplication1.Expression;
+using Calculator.Expression;
 
-namespace ConsoleApplication1
+namespace Calculator
 {
     class Program
     {

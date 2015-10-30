@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConsoleApplication1.Expression;
+﻿using Calculator.Expression;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ConsoleApplication1.Tests
+namespace Calculator.Tests
 {
     [TestFixture]
     class ExpressionParserTests

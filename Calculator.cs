@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsoleApplication1.Expression;
+using Calculator.Expression;
 
-namespace ConsoleApplication1
+namespace Calculator
 {
     public class Calculator
     {

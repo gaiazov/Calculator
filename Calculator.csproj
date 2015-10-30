@@ -7,8 +7,8 @@
     <ProjectGuid>{EA4687D4-2328-4EBB-9B9C-B7263093C44B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
-    <AssemblyName>ConsoleApplication1</AssemblyName>
+    <RootNamespace>Calculator</RootNamespace>
+    <AssemblyName>Calculator</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculator.cs" />
+    <Compile Include="Tests\ExcerciseTests.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\Expression.cs" />
     <Compile Include="Program.cs" />

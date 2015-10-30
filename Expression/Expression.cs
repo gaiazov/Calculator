@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleApplication1.Expression
+namespace Calculator.Expression
 {
     public interface IExpression
     {
