@@ -24,8 +24,8 @@ namespace ConsoleApplication1.Expression
 
     public class OperationExpression: IExpression
     {
-        public IExpression Left { get; }
-        public IExpression Right { get; }
+        public IExpression Left { get; set;  }
+        public IExpression Right { get; set; }
         public Operand Operand { get; }
 
         public OperationExpression(IExpression left, Operand operand, IExpression right)
@@ -33,6 +33,16 @@ namespace ConsoleApplication1.Expression
             Operand = operand;
             Left = left;
             Right = right;
+        }
+        public OperationExpression(IExpression left, Operand operand)
+        {
+            Operand = operand;
+            Left = left;
+        }
+
+        public OperationExpression(Operand operand)
+        {
+            Operand = operand;
         }
 
         public double Evaluate()

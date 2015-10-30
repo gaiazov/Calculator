@@ -7,9 +7,6 @@ namespace ConsoleApplication1.Expression
 {
     public class ExpressionParser
     {
-        private static readonly IList<char> _operands = new[] { '-', '+', '/', '*'};
-
-
         private readonly Stack<char> _expression = new Stack<char>();
 
         public ExpressionParser(string expression)
@@ -18,47 +15,152 @@ namespace ConsoleApplication1.Expression
             {
                 _expression.Push(c);
             }
-
-
         }
 
         public IExpression Parse()
         {
-            IExpression expr = null;
-            var c = _expression.Peek();
+
+            var left = new Stack<IExpression>();
+            var operands = new Stack<Operand>();
+            var right = new Stack<IExpression>(); 
 
             while (HasMoreChars)
             {
+                var c = _expression.Peek();
+
                 if (char.IsDigit(c))
                 {
-                    expr = ParseParameterExpression(ReadParameterExpression());
+                    var parameter = ReadParameterExpression();
+                    var expression = ParseParameterExpression(parameter);
+                    if (left.Count == right.Count)
+                    {
+                        left.Push(expression);
+                    }
+                    else
+                    {
+                        right.Push(expression);
+                    }
                 }
-
-                else if (IsOperand(c))
+                else if (IsPlusOrMinus(c) || IsTimesOrDivide(c))
                 {
                     var operand = ParseOperand(_expression.Pop());
-                    
-                    var right = Parse();
 
-                    expr = new OperationExpression(expr, operand, right);
+                    if (right.Any() && (operand == Operand.Divide || operand == Operand.Multiply))
+                    {
+                        left.Push(right.Pop());
+                    }
+
+                    if (operands.Any())
+                    {
+                        var currentOperand = operands.Peek();
+                        if ((operand == Operand.Plus || operand == Operand.Minus) &&
+                            (currentOperand == Operand.Multiply || currentOperand == Operand.Divide))
+                        {
+                            var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
+
+                            if (left.Count == right.Count)
+                            {
+                                left.Push(expression);
+                            }
+                            else
+                            {
+                                right.Push(expression);
+                            }
+                        }
+
+                        if ((operand == Operand.Plus || operand == Operand.Minus) &&
+                            (currentOperand == Operand.Plus || currentOperand == Operand.Minus))
+                        {
+                            var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
+
+                            if (left.Count == right.Count)
+                            {
+                                left.Push(expression);
+                            }
+                            else
+                            {
+                                right.Push(expression);
+                            }
+                        }
+                    }
+
+                    operands.Push(operand);
+                }
+                else if (IsOpeningBracket(c))
+                {
+                    _expression.Pop();
+                    var expression = Parse();
+
+                    if (left.Count == right.Count)
+                    {
+                        left.Push(expression);
+                    }
+                    else
+                    {
+                        right.Push(expression);
+                    }
+                }
+                else if (IsClosingBracket(c))
+                {
+                    _expression.Pop();
+
+                    while (operands.Any())
+                    {
+                        var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
+
+                        if (left.Count == right.Count)
+                        {
+                            left.Push(expression);
+                        }
+                        else
+                        {
+                            right.Push(expression);
+                        }
+                    }
+
+                    return left.Pop();
                 }
                 else
                 {
                     throw new NotImplementedException();
                 }
+            }
 
-                if (HasMoreChars)
+            while (operands.Any())
+            {
+                var expression = new OperationExpression(left.Pop(), operands.Pop(), right.Pop());
+
+                if (left.Count == right.Count)
                 {
-                    c = _expression.Peek();
+                    left.Push(expression);
+                }
+                else
+                {
+                    right.Push(expression);
                 }
             }
 
-            return expr;
+            return left.Pop();
         }
 
-        internal static bool IsOperand(char c)
+        internal static bool IsPlusOrMinus(char c)
         {
-            return _operands.Contains(c);
+            return c == '-' || c == '+';
+        }
+
+        internal static bool IsTimesOrDivide(char c)
+        {
+            return c == '*' || c == '/';
+        }
+
+        internal static bool IsOpeningBracket(char c)
+        {
+            return c == '(';
+        }
+
+        internal static bool IsClosingBracket(char c)
+        {
+            return c == ')';
         }
 
         internal Operand ParseOperand(char c)
@@ -93,7 +195,7 @@ namespace ConsoleApplication1.Expression
             return expression.ToString();
         }
 
-        private bool HasMoreChars => _expression.Count > 0;
+        private bool HasMoreChars => _expression.Any();
 
         internal IExpression ParseParameterExpression(string expression)
         {

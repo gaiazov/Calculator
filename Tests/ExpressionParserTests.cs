@@ -72,6 +72,7 @@ namespace ConsoleApplication1.Tests
             parsedExpression.Should()
                 .BeOfType<OperationExpression>();
 
+            /*
             var opExpression = (OperationExpression)parsedExpression;
             opExpression.Left.Should().BeOfType<ParameterExpression>();
             opExpression.Left.As<ParameterExpression>().Parameter.Should().Be(2);
@@ -90,9 +91,65 @@ namespace ConsoleApplication1.Tests
             right2.Operand.Should().Be(Operand.Plus);
             right2.Right.Should().BeOfType<ParameterExpression>();
             right2.Right.As<ParameterExpression>().Parameter.Should().Be(20);
+            */
 
 
             parsedExpression.Evaluate().Should().Be(22d);
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Multiplication()
+        {
+            var parsedExpression = new ExpressionParser("5*3").Parse();
+            parsedExpression.Evaluate().Should().Be(15);
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Multiplication_And_Addition()
+        {
+            var parsedExpression = new ExpressionParser("5*3+2").Parse();
+            parsedExpression.Evaluate().Should().Be(17);
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Addition_And_Multiplication()
+        {
+            var parsedExpression = new ExpressionParser("9+5*3").Parse();
+            parsedExpression.Evaluate().Should().Be(9+5*3);
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Brackets()
+        {
+            var parsedExpression = new ExpressionParser("20-(5+3)").Parse();
+            parsedExpression.Evaluate().Should().Be(20 - (5 + 3));
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Complex_Brackets()
+        {
+            var parsedExpression = new ExpressionParser("20-(5*(3+4*2+2))").Parse();
+            parsedExpression.Evaluate().Should().Be(20 - (5*(3 + 4*2 + 2)));
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Long_Multiplication_And_Addition()
+        {
+            var parsedExpression = new ExpressionParser("2+(3+4*2+2)").Parse();
+            parsedExpression.Evaluate().Should().Be(2 + (3 + 4*2 + 2));
+        }
+
+        [Test]
+        public void Expression_Parser_Should_Parse_Division()
+        {
+            var parsedExpression = new ExpressionParser("10/5").Parse();
+            parsedExpression.Evaluate().Should().Be(10/5);
+        }
+        [Test]
+        public void Expression_Parser_Should_Parse_Division_And_Addition()
+        {
+            var parsedExpression = new ExpressionParser("10/5+3").Parse();
+            parsedExpression.Evaluate().Should().Be(10/5 + 3);
         }
 
         [Test]
