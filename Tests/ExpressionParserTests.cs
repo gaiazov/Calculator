@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Calculator.Tests
 {
     [TestFixture]
-    class ExpressionParserTests
+    internal class ExpressionParserTests
     {
         [Test]
         public void Expression_Parser_Should_Parse_One_Plus_One()
@@ -31,7 +31,7 @@ namespace Calculator.Tests
             parsedExpression.Should()
                 .BeOfType<OperationExpression>();
 
-            var opExpression = (OperationExpression)parsedExpression;
+            var opExpression = (OperationExpression) parsedExpression;
             opExpression.Left.Should().BeOfType<ParameterExpression>();
             opExpression.Right.Should().BeOfType<ParameterExpression>();
             opExpression.Operand.Should().Be(Operand.Minus);
@@ -48,7 +48,7 @@ namespace Calculator.Tests
             parsedExpression.Should()
                 .BeOfType<OperationExpression>();
 
-            var opExpression = (OperationExpression)parsedExpression;
+            var opExpression = (OperationExpression) parsedExpression;
             opExpression.Left.Should().BeOfType<ParameterExpression>();
             opExpression.Right.Should().BeOfType<ParameterExpression>();
             opExpression.Operand.Should().Be(Operand.Minus);
@@ -110,7 +110,7 @@ namespace Calculator.Tests
         public void Expression_Parser_Should_Parse_Addition_And_Multiplication()
         {
             var parsedExpression = new ExpressionParser("9+5*3").Parse();
-            parsedExpression.Evaluate().Should().Be(9+5*3);
+            parsedExpression.Evaluate().Should().Be(9 + 5*3);
         }
 
         [Test]
@@ -156,6 +156,13 @@ namespace Calculator.Tests
         }
 
         [Test]
+        public void Expression_Parser_Should_Parse_Nested_Brackets()
+        {
+            var parsedExpression = new ExpressionParser("10/5 + 3 + 4*(2 - (1 + (3 - 4)/2 - 5*(1 + 2))/2 + 5)").Parse();
+            parsedExpression.Evaluate().Should().Be(10/5 + 3 + 4*(2 - (1 + (3 - 4)/2d - 5*(1 + 2))/2d + 5));
+        }
+
+        [Test]
         public void Expression_Parser_Should_Parse_Fifty_Five_Minus_Five()
         {
             var parsedExpression = new ExpressionParser("55-5").Parse();
@@ -163,7 +170,7 @@ namespace Calculator.Tests
             parsedExpression.Should()
                 .BeOfType<OperationExpression>();
 
-            var opExpression = (OperationExpression)parsedExpression;
+            var opExpression = (OperationExpression) parsedExpression;
             opExpression.Left.Should().BeOfType<ParameterExpression>();
             opExpression.Left.Evaluate().Should().Be(55d);
             opExpression.Right.Should().BeOfType<ParameterExpression>();
